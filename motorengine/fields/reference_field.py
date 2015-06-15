@@ -66,7 +66,8 @@ class ReferenceField(BaseField):
         if isinstance(value, ObjectId):
             return value
 
-        return value._id
+        return value
+        #return value._id
 
     def from_son(self, value):
         return value

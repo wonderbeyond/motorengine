@@ -53,12 +53,24 @@ class BaseDocument(object):
     @classmethod
     def from_son(cls, dic):
         field_values = {}
-        for name, value in dic.items():
-            field = cls.get_field_by_db_name(name)
-            if field:
-                field_values[field.name] = cls._fields[field.name].from_son(value)
+
+        for field_name, field in cls._fields.items():
+            try:
+                value = dic
+                dot_attrs = field.db_field.split('.')
+                for attr in dot_attrs:
+                    value = value[attr]
+            except KeyError:
+                field_values[field_name] = None
             else:
-                field_values[name] = value
+                field_values[field_name] = cls._fields[field_name].from_son(value)
+
+        #for name, value in dic.items():
+        #    field = cls.get_field_by_db_name(name)
+        #    if field:
+        #        field_values[field.name] = cls._fields[field.name].from_son(value)
+        #    else:
+        #        field_values[name] = value
 
         return cls(**field_values)
 

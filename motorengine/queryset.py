@@ -22,6 +22,7 @@ class QuerySet(object):
         self._limit = None
         self._skip = None
         self._order_fields = []
+        self._projection = None
 
     @property
     def is_lazy(self):
@@ -335,6 +336,14 @@ class QuerySet(object):
         if self._skip:
             find_arguments['skip'] = self._skip
 
+        if self._projection:
+            import pymongo
+
+            if pymongo.version_tuple < (3,):
+                find_arguments['fields'] = self._projection
+            else:
+                find_arguments['projection'] = self._projection
+
         query_filters = self.get_query_from_filters(self._filters)
 
         return self.coll(alias).find(query_filters, **find_arguments)
@@ -417,6 +426,26 @@ class QuerySet(object):
         '''
 
         self._limit = limit
+        return self
+
+    def only(self, *fields):
+        '''
+        Load only a subset of this document's fields.
+
+        Usage::
+
+            User.objects().only("first_name", "last_name")
+        '''
+        if not fields:
+            return self
+
+        if not self._projection:
+            self._projection = {}
+
+        for field_name in fields:
+            field = self.__klass__._fields.get(field_name)
+            db_field = field.db_field if field else field_name
+            self._projection[db_field] = True
         return self
 
     def order_by(self, field_name, direction=ASCENDING):

@@ -10,6 +10,7 @@ from motorengine.query.greater_than_or_equal import GreaterThanOrEqualQueryOpera
 from motorengine.query.lesser_than import LesserThanQueryOperator
 from motorengine.query.lesser_than_or_equal import LesserThanOrEqualQueryOperator
 from motorengine.query.in_operator import InQueryOperator
+from motorengine.query.all_operator import AllQueryOperator
 from motorengine.query.is_null import IsNullQueryOperator
 from motorengine.query.not_operator import NotOperator
 from motorengine.query.not_equal import NotEqualQueryOperator
@@ -22,6 +23,7 @@ OPERATORS = {
     'lt': LesserThanQueryOperator,
     'lte': LesserThanOrEqualQueryOperator,
     'in': InQueryOperator,
+    'all': AllQueryOperator,
     'is_null': IsNullQueryOperator,
     'ne': NotEqualQueryOperator,
     'not': NotOperator,

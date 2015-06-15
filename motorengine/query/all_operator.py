@@ -4,7 +4,7 @@
 from motorengine.query.base import QueryOperator
 
 
-class InQueryOperator(QueryOperator):
+class AllQueryOperator(QueryOperator):
     '''
     Query operator used to return all documents that have the specified field with a value that match one of the values in the specified range.
 
@@ -44,7 +44,7 @@ class InQueryOperator(QueryOperator):
     def to_query(self, field_name, value):
         return {
             field_name: {
-                "$in": value
+                "$all": value
             }
         }
 
